@@ -76,7 +76,7 @@ export default function PlansPage({ plans = [], currentSubscription }) {
               ESCOLHA SEU PLANO
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Planos e Precos</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">Planos e Precos</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Escolha o plano ideal para suas necessidades.
             </p>
@@ -99,7 +99,7 @@ export default function PlansPage({ plans = [], currentSubscription }) {
               return (
                 <Card
                   key={plan.id}
-                  className={`relative bg-card/30 border transition-all duration-300 hover:scale-[1.02] ${recommended ? 'border-primary/50 shadow-lg shadow-primary/10' : 'border-white/5 hover:border-white/10'
+                  className={`relative bg-card border transition-all duration-300 hover:scale-[1.02] ${recommended ? 'border-primary/50 shadow-lg shadow-primary/10' : 'border-border hover:border-primary/20'
                     } ${isCurrentPlan ? 'ring-2 ring-emerald-500/50' : ''}`}
                 >
                   {recommended && (
@@ -118,17 +118,17 @@ export default function PlansPage({ plans = [], currentSubscription }) {
                   )}
 
                   <CardHeader className="text-center pt-8 pb-4">
-                    <div className={`w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4 ${recommended ? 'bg-primary/20 text-primary border border-primary/30' : 'bg-white/5 text-white/70 border border-white/10'
+                    <div className={`w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4 ${recommended ? 'bg-primary/20 text-primary border border-primary/30' : 'bg-muted text-muted-foreground border border-border'
                       }`}>
                       {getPlanIcon(index)}
                     </div>
-                    <CardTitle className="text-xl font-bold text-white">{plan.name}</CardTitle>
+                    <CardTitle className="text-xl font-bold text-foreground">{plan.name}</CardTitle>
                     {plan.description && <CardDescription className="text-sm mt-2">{plan.description}</CardDescription>}
                   </CardHeader>
 
                   <CardContent className="text-center pb-6">
                     <div className="mb-6">
-                      <span className="text-4xl font-bold text-white">{formatCurrency(plan.price)}</span>
+                      <span className="text-4xl font-bold text-foreground">{formatCurrency(plan.price)}</span>
                       <span className="text-muted-foreground text-sm">/{plan.interval === 'monthly' ? 'mes' : 'ano'}</span>
                     </div>
 
@@ -138,7 +138,7 @@ export default function PlansPage({ plans = [], currentSubscription }) {
                           <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
                             <Check className="w-3 h-3 text-emerald-400" />
                           </div>
-                          <span className="text-white/80">{feature}</span>
+                          <span className="text-muted-foreground">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -146,7 +146,7 @@ export default function PlansPage({ plans = [], currentSubscription }) {
 
                   <CardFooter className="pt-0 pb-6 px-6">
                     <Button
-                      className={`w-full h-12 gap-2 ${recommended ? '' : 'bg-white/5 hover:bg-white/10 text-white border-white/10'}`}
+                      className={`w-full h-12 gap-2 ${recommended ? '' : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground border-border'}`}
                       variant={recommended ? 'default' : 'outline'}
                       onClick={() => handleSubscribe(plan)}
                       disabled={isCurrentPlan || processing}
@@ -175,9 +175,9 @@ export default function PlansPage({ plans = [], currentSubscription }) {
         </div>
 
         <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-          <DialogContent className="bg-card border-white/10">
+          <DialogContent className="bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-white flex items-center gap-2">
+              <DialogTitle className="text-foreground flex items-center gap-2">
                 <Crown className="w-5 h-5 text-primary" />
                 Confirmar Assinatura
               </DialogTitle>

@@ -59,7 +59,7 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
                   <Crown className="w-10 h-10 text-primary" />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold text-white">Nenhuma Assinatura Ativa</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Nenhuma Assinatura Ativa</h2>
                   <p className="text-muted-foreground max-w-md mx-auto">
                     Voce ainda nao possui uma assinatura ativa.
                   </p>
@@ -86,23 +86,23 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
       <Head title="Assinatura" />
       <Layout>
         <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
-          
+
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white tracking-tight">Minha Assinatura</h1>
+              <h1 className="text-3xl font-bold text-foreground tracking-tight">Minha Assinatura</h1>
               <p className="text-muted-foreground font-mono mt-1">GERENCIAMENTO DE PLANO</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
+
             <InfoCard title="Plano Atual" icon={<Crown className="w-4 h-4" />} className="lg:col-span-1">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
                   <CreditCard className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <div className="text-xl font-bold text-white">{plan?.name || 'Plano'}</div>
+                  <div className="text-xl font-bold text-foreground">{plan?.name || 'Plano'}</div>
                   <div className="text-2xl font-mono text-primary font-bold">
                     {formatCurrency(plan?.price)}
                     <span className="text-sm text-muted-foreground font-normal">/{plan?.interval === 'monthly' ? 'mes' : 'ano'}</span>
@@ -110,7 +110,7 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                   <span className="text-sm text-muted-foreground">Status</span>
                   {getStatusBadge(subscription?.status)}
                 </div>
@@ -120,7 +120,7 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
             </InfoCard>
 
             <div className="lg:col-span-2 space-y-6">
-              <Card className="bg-card/30 border-white/5">
+              <Card className="bg-card/30 border-border">
                 <CardHeader className="pb-2">
                   <div className="flex items-center gap-2">
                     <Activity className="w-4 h-4 text-primary" />
@@ -132,9 +132,9 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {(plan?.features || []).map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
+                      <div key={index} className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
                         <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                        <span className="text-sm text-white">{feature}</span>
+                        <span className="text-sm text-foreground">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -150,8 +150,8 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
                   <Receipt className="w-4 h-4" />
                   Historico de Pagamentos
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setShowCancelDialog(true)}
                   className="gap-2 h-12 text-red-400 hover:text-red-400 hover:bg-red-500/10 border-red-500/20"
                 >
@@ -164,9 +164,9 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
         </div>
 
         <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-          <DialogContent className="bg-card border-white/10">
+          <DialogContent className="bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-white">Cancelar Assinatura</DialogTitle>
+              <DialogTitle className="text-foreground">Cancelar Assinatura</DialogTitle>
               <DialogDescription>
                 Tem certeza que deseja cancelar? Voce perdera acesso ao final do periodo atual.
               </DialogDescription>
@@ -182,9 +182,9 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
         </Dialog>
 
         <Dialog open={showPaymentsDialog} onOpenChange={setShowPaymentsDialog}>
-          <DialogContent className="bg-card border-white/10 max-w-2xl">
+          <DialogContent className="bg-card border-border max-w-2xl">
             <DialogHeader>
-              <DialogTitle className="text-white flex items-center gap-2">
+              <DialogTitle className="text-foreground flex items-center gap-2">
                 <History className="w-5 h-5" />
                 Historico de Pagamentos
               </DialogTitle>
@@ -192,22 +192,22 @@ export default function SubscriptionPage({ subscription, payments = [], plans = 
             <div className="space-y-3 max-h-[400px] overflow-y-auto">
               {payments.length > 0 ? (
                 payments.map((payment) => (
-                  <div key={payment.id} className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/5">
+                  <div key={payment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border">
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-primary/10 rounded-lg">
                         <Receipt className="w-4 h-4 text-primary" />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-white">Pagamento de Assinatura</div>
+                        <div className="text-sm font-medium text-foreground">Pagamento de Assinatura</div>
                         <div className="text-xs text-muted-foreground">{payment.created_at}</div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-mono font-bold text-white">{formatCurrency(payment.amount)}</div>
+                      <div className="text-sm font-mono font-bold text-foreground">{formatCurrency(payment.amount)}</div>
                       <Badge variant="outline" className={
                         payment.status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                        payment.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
-                        'bg-red-500/10 text-red-400 border-red-500/20'
+                          payment.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
+                            'bg-red-500/10 text-red-400 border-red-500/20'
                       }>
                         {payment.status === 'paid' ? 'PAGO' : payment.status === 'pending' ? 'PENDENTE' : 'FALHOU'}
                       </Badge>

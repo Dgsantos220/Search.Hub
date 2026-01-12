@@ -84,6 +84,15 @@ class SettingsController extends Controller
         $user->password = Hash::make($validated['password']);
         $user->save();
 
+        // Send Notification
+        $notificationService = app(\App\Services\NotificationService::class);
+        $notificationService->send(
+            $user,
+            'Senha Alterada',
+            'Sua senha de acesso foi alterada recentemente. Se não foi você, contate o suporte imediatamente.',
+            ['type' => 'warning']
+        );
+
         return back()->with('success', 'Senha alterada com sucesso.');
     }
 

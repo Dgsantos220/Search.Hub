@@ -159,7 +159,7 @@ export default function DashboardPage() {
 
                 <div className="space-y-2">
                   <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground drop-shadow-sm">
-                    Search<span className="text-primary">.Hub</span>
+                    Los <span className="text-primary">Dados</span>
                   </h1>
                   <p className="text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
                     {t('dashboard.hero.description')}
@@ -220,12 +220,12 @@ export default function DashboardPage() {
               {t('dashboard.footer.secure')}
             </div>
             <p className="mt-4 text-[10px] text-muted-foreground/60">
-              © {new Date().getFullYear()} Search.Hub Intelligence. {t('dashboard.footer.rights')}
+              © {new Date().getFullYear()} Los Dados. {t('dashboard.footer.rights')}
             </p>
           </footer>
 
-        </div>
-      </Layout>
+        </div >
+      </Layout >
     </>
   );
 }

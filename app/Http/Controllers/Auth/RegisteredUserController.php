@@ -55,6 +55,15 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        // Send Welcome Notification
+        $notificationService = app(\App\Services\NotificationService::class);
+        $notificationService->send(
+            $user,
+            'Bem-vindo ao Los Dados!',
+            'Obrigado por criar sua conta. Explore nossos painéis e realize suas consultas com agilidade.',
+            ['type' => 'success']
+        );
+
         return redirect(route('dashboard', absolute: false));
     }
 }

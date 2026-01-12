@@ -2,95 +2,36 @@
 
 namespace App\Services;
 
-use App\Mail\PaymentApprovedMail;
-use App\Mail\PaymentFailedMail;
-use App\Mail\SubscriptionActivatedMail;
-use App\Models\Payment;
-use App\Models\Subscription;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use App\Notifications\GeneralNotification;
+use App\Models\UserSettings;
 
 class NotificationService
 {
-    public function sendPaymentApproved(Payment $payment): void
+    /**
+     * Send a notification to a user based on their preferences.
+     *
+     * @param User $user
+     * @param string $title
+     * @param string $message
+     * @param array $options Optional: 'action_url', 'action_text', 'type' (success, info, error)
+     * @return void
+     */
+    public function send(User $user, string $title, string $message, array $options = []): void
     {
-        try {
-            $user = $payment->user;
-            
-            if (!$user || !$user->email) {
-                Log::warning('Cannot send payment approved email: user or email not found', [
-                    'payment_id' => $payment->id,
-                ]);
-                return;
-            }
-
-            Mail::to($user->email)->send(new PaymentApprovedMail($payment));
-
-            Log::info('Payment approved email sent', [
-                'payment_id' => $payment->id,
-                'user_id' => $user->id,
-                'email' => $user->email,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to send payment approved email', [
-                'payment_id' => $payment->id,
-                'error' => $e->getMessage(),
-            ]);
+        $settings = $user->getSettings();
+        
+        // Determine channels based on preferences
+        $channels = ['database']; // Always save to database/internal notifications if implemented later
+        
+        if ($settings->notifications_email) {
+            $channels[] = 'mail';
         }
-    }
-
-    public function sendPaymentFailed(Payment $payment, ?string $reason = null): void
-    {
-        try {
-            $user = $payment->user;
-            
-            if (!$user || !$user->email) {
-                Log::warning('Cannot send payment failed email: user or email not found', [
-                    'payment_id' => $payment->id,
-                ]);
-                return;
-            }
-
-            Mail::to($user->email)->send(new PaymentFailedMail($payment, $reason));
-
-            Log::info('Payment failed email sent', [
-                'payment_id' => $payment->id,
-                'user_id' => $user->id,
-                'email' => $user->email,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to send payment failed email', [
-                'payment_id' => $payment->id,
-                'error' => $e->getMessage(),
-            ]);
+        
+        if ($settings->notifications_push) {
+            $channels[] = \NotificationChannels\WebPush\WebPushChannel::class;
         }
-    }
 
-    public function sendSubscriptionActivated(Subscription $subscription): void
-    {
-        try {
-            $user = $subscription->user;
-            
-            if (!$user || !$user->email) {
-                Log::warning('Cannot send subscription activated email: user or email not found', [
-                    'subscription_id' => $subscription->id,
-                ]);
-                return;
-            }
-
-            Mail::to($user->email)->send(new SubscriptionActivatedMail($subscription));
-
-            Log::info('Subscription activated email sent', [
-                'subscription_id' => $subscription->id,
-                'user_id' => $user->id,
-                'email' => $user->email,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to send subscription activated email', [
-                'subscription_id' => $subscription->id,
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $user->notify(new GeneralNotification($title, $message, $options, $channels));
     }
 }

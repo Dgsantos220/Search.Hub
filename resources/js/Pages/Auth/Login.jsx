@@ -48,7 +48,7 @@ export default function Login({ status, canResetPassword }) {
                             <ShieldCheck className="w-10 h-10 text-primary" />
                         </div>
                         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                            Search<span className="text-primary">.Hub</span>
+                            Los <span className="text-primary">Dados</span>
                         </h1>
                         <p className="text-muted-foreground text-sm font-mono">
                             {t('auth.login.heroSubtitle')}

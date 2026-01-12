@@ -51,7 +51,7 @@ export default function LandingPage() {
               <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-primary" />
             </div>
             <span className="font-mono font-bold tracking-tighter text-lg md:text-xl text-foreground">
-              Search<span className="text-primary">.Hub</span>
+              Los <span className="text-primary">Dados</span>
             </span>
           </div>
 

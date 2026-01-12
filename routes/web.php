@@ -60,6 +60,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/subscription', [PageController::class, 'subscription'])->name('subscription');
     Route::post('/subscription/cancel', [PageController::class, 'cancelSubscription'])->name('subscription.cancel');
     Route::post('/subscription/checkout', [PageController::class, 'checkout'])->name('subscription.checkout');
+    
+    // Push Notifications
+    Route::post('/push/subscribe', [\App\Http\Controllers\PushNotificationController::class, 'store'])->name('push.subscribe');
+    Route::post('/push/unsubscribe', [\App\Http\Controllers\PushNotificationController::class, 'destroy'])->name('push.unsubscribe');
 });
 
 

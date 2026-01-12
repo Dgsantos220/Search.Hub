@@ -13,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, SoftDeletes;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, SoftDeletes, \NotificationChannels\WebPush\HasPushSubscriptions;
 
     const STATUS_ACTIVE = 'active';
     const STATUS_BLOCKED = 'blocked';

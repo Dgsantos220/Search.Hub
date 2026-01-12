@@ -52,7 +52,7 @@ export function generateProfessionalPDF(data, query, module) {
     pdf.setTextColor(...colors.text.white);
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(22);
-    pdf.text('SEARCH.HUB', margin, 18);
+    pdf.text('LOS DADOS', margin, 18);
 
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
@@ -313,7 +313,7 @@ export function generateProfessionalPDF(data, query, module) {
 
     pdf.setFontSize(8);
     pdf.setTextColor(...colors.text.light);
-    pdf.text(`Search.Hub Intelligence - Página ${i} de ${pageCount}`, margin, pageHeight - 6);
+    pdf.text(`Los Dados - Página ${i} de ${pageCount}`, margin, pageHeight - 6);
     pdf.text('Documento Confidencial - Uso Exclusivo', pageWidth - margin, pageHeight - 6, { align: 'right' });
   }
 

@@ -277,7 +277,95 @@ export default function SettingsPage({ user, settings, options, subscription }) 
                       <div className="text-xs text-muted-foreground">{t('settings.notifications.pushDesc')}</div>
                     </div>
                     <button
-                      onClick={() => setNotifications({ ...notifications, notifications_push: !notifications.notifications_push })}
+                      onClick={async () => {
+                        const newState = !notifications.notifications_push;
+
+                        if (newState) {
+                          // Enabling Push
+                          if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                            toast.error(t('settings.notifications.unsupported') || 'Push notifications not supported');
+                            return;
+                          }
+
+                          try {
+                            const permission = await Notification.requestPermission();
+                            if (permission !== 'granted') {
+                              toast.error(t('settings.notifications.denied') || 'Permission denied');
+                              return;
+                            }
+
+                            const registration = await navigator.serviceWorker.ready;
+                            let subscription = await registration.pushManager.getSubscription();
+
+                            if (!subscription) {
+                              const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+                              if (!vapidKey) {
+                                toast.error('VAPID key missing');
+                                return;
+                              }
+
+                              const urlBase64ToUint8Array = (base64String) => {
+                                const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                                const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+                                const rawData = window.atob(base64);
+                                const outputArray = new Uint8Array(rawData.length);
+                                for (let i = 0; i < rawData.length; ++i) {
+                                  outputArray[i] = rawData.charCodeAt(i);
+                                }
+                                return outputArray;
+                              }
+
+                              subscription = await registration.pushManager.subscribe({
+                                userVisibleOnly: true,
+                                applicationServerKey: urlBase64ToUint8Array(vapidKey)
+                              });
+                            }
+
+                            await window.axios.post('/push/subscribe', subscription.toJSON());
+
+                            const newNotifications = { ...notifications, notifications_push: true };
+                            setNotifications(newNotifications);
+                            toast.success(t('settings.notifications.enabled') || 'Push notifications enabled');
+
+                            // Update preference in backend
+                            router.put('/settings/notifications', newNotifications, {
+                              preserveScroll: true,
+                              onError: (errors) => toast.error(Object.values(errors)[0])
+                            });
+                          } catch (error) {
+                            console.error(error);
+                            toast.error('Failed to enable push notifications');
+                          }
+                        } else {
+                          // Disabling Push
+                          try {
+                            const registration = await navigator.serviceWorker.ready;
+                            const subscription = await registration.pushManager.getSubscription();
+                            if (subscription) {
+                              await window.axios.post('/push/unsubscribe', { endpoint: subscription.endpoint });
+                              await subscription.unsubscribe();
+                            }
+
+                            const newNotifications = { ...notifications, notifications_push: false };
+                            setNotifications(newNotifications);
+
+                            router.put('/settings/notifications', newNotifications, {
+                              preserveScroll: true,
+                              onError: (errors) => toast.error(Object.values(errors)[0])
+                            });
+                          } catch (error) {
+                            console.error(error);
+                            // Force disable in UI even if SW fails
+                            const newNotifications = { ...notifications, notifications_push: false };
+                            setNotifications(newNotifications);
+
+                            router.put('/settings/notifications', newNotifications, {
+                              preserveScroll: true,
+                              onError: (errors) => toast.error(Object.values(errors)[0])
+                            });
+                          }
+                        }
+                      }}
                       className={`w-12 h-6 rounded-full transition-colors ${notifications.notifications_push ? 'bg-primary' : 'bg-muted-foreground/20'}`}
                     >
                       <div className={`w-5 h-5 bg-card rounded-full transition-transform ${notifications.notifications_push ? 'translate-x-6' : 'translate-x-0.5'}`} />
@@ -420,7 +508,10 @@ export default function SettingsPage({ user, settings, options, subscription }) 
                       </div>
 
                       <div className="pt-4 flex justify-end">
-                        <button className="px-4 py-2 border border-border rounded-lg hover:bg-muted text-sm font-medium transition-colors">
+                        <button
+                          onClick={() => router.visit('/subscription')}
+                          className="px-4 py-2 border border-border rounded-lg hover:bg-muted text-sm font-medium transition-colors"
+                        >
                           {t('settings.plan.manage')}
                         </button>
                       </div>

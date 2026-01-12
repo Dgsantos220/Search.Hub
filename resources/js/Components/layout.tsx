@@ -69,7 +69,7 @@ export function Layout({ children, hideNav = false }: LayoutProps) {
                   <ShieldCheck className="w-5 h-5 text-primary" />
                 </div>
                 <span className="font-mono font-bold tracking-tighter text-lg text-foreground">
-                  Search<span className="text-primary">.Hub</span>
+                  Los <span className="text-primary">Dados</span>
                 </span>
               </div>
             </Link>
